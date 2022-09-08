@@ -158,7 +158,7 @@ const resetNewPassword = async (req, res) => {
 
   const isPasswordMatch = user.comparePassword(oldPassword);
   if (!isPasswordMatch) {
-    throw new customError.UnauthenticatedError("Old password incorect");
+    throw new customError.UnauthenticatedError("Old password incorect.");
   }
 
   if (user.passwordToken != passwordToken) {
