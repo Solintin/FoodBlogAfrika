@@ -44,16 +44,16 @@ app.use("/api/v1/auth", authRoute);
 app.use(notFound)
 app.use(errorHandler)
 
-app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
-});
-// const start = async () => {
-//   try {
-//     await connectDb(MONGODB_URI);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
+const start = async () => {
+  try {
+    app.listen(port, () => {
+      console.log(`Server is listening on port ${port}`);
+    });
+    await connectDb(MONGODB_URI);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-// start();
+start();
 
