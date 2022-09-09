@@ -18,7 +18,7 @@ const sendEmail = async ({ to, subject, template, context }) => {
   transporter.use("compile", hbs(handlebarOptions));
   return transporter.sendMail(
     {
-      from: '"Benjamin Jacson<hello@foodblogafrika>', // sender address
+      from: '"foodblogafrika<hello@foodblogafrika>', // sender address
       to, // list of receivers
       subject, // Subject line
       template,
