@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const config = require("./nodeMailer.config");
+const config = require("./nodemailer.config");
 const sendEmail = async ({ to, subject, template, context }) => {
   const hbs = require("nodemailer-express-handlebars");
   const path = require("path");
