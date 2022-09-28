@@ -9,19 +9,15 @@ require("express-async-errors"); //Replaces user defined try catch errors in con
 require("dotenv").config();
 const connectDb = require("./db/dbConfig");
 const port = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGO_URI
-const notFound = require("./middleware/notFound")
-const errorHandler = require("./middleware/errorHandler")
-const authRoute = require("./routes/authRoute")
-
-
-
+const MONGODB_URI = process.env.MONGO_URI;
+const notFound = require("./middleware/notFound");
+const errorHandler = require("./middleware/errorHandler");
+const authRoute = require("./routes/authRoute");
 
 const app = express();
 // Middlewares
 app.use(express.json());
 const morgan = require("morgan");
-
 
 app.use(morgan("tiny"));
 app.use(express.json());
@@ -29,31 +25,29 @@ app.use(cors());
 app.use(
   rateLimiter({
     windowMs: 15 * 60 * 60,
-    max:60
+    max: 60,
   })
 );
 app.use(xss());
 app.use(mongoSanitize());
 app.use(helmet());
 
-
-
 // Routes
 app.use("/api/v1/auth", authRoute);
 
-app.use(notFound)
-app.use(errorHandler)
+app.use(notFound);
+app.use(errorHandler);
 
 const start = async () => {
   try {
+    console.log(MONGODB_URI);
+    await connectDb(MONGODB_URI);
     app.listen(port, () => {
       console.log(`Server is listening on port ${port}`);
     });
-    await connectDb(MONGODB_URI);
   } catch (error) {
     console.log(error);
   }
 };
 
 start();
-
