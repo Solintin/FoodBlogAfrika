@@ -12,20 +12,53 @@ const { StatusCodes } = require("http-status-codes");
 //desc        Register user
 //permission  Public
 const Register = async (req, res) => {
-  const { email, password, phone, first_name, last_name } = req.body;
+  const {
+    email,
+    password,
+    phone,
+    first_name,
+    last_name,
+    role,
+    store_name,
+    store_state,
+    store_address,
+    store_country,
+    store_description,
+  } = req.body;
+  if (!role) throw new customError.BadRequestError("Role is required");
 
-  if (!email || !password || !phone || !first_name || !last_name) {
+  if (
+    role === "user" &&
+    (!email || !password || !phone || !first_name || !last_name)
+  ) {
     throw new customError.BadRequestError(
-      "All registration parameter is required"
+      "All registration parameter is required as an individual"
+    );
+  }
+  if (
+    role === "vendor" &&
+    (!email ||
+      !password ||
+      !phone ||
+      !first_name ||
+      !last_name ||
+      !store_name ||
+      !store_state ||
+      !store_country ||
+      !store_address ||
+      !store_description)
+  ) {
+    throw new customError.BadRequestError(
+      "All registration parameter is required as a vendor"
     );
   }
   const user = await User.findOne({ email });
   if (user) {
     throw new customError.BadRequestError("user already exists");
   }
-  const isFirstUser = (await User.countDocuments()) == 0;
-  const role = isFirstUser ? "admin" : "user";
-  req.body.role = role;
+  // const isFirstUser = (await User.countDocuments()) == 0;
+  // const role = isFirstUser ? "admin" : "user";
+  // req.body.role = role;
   const verificationToken = crypto.randomBytes(40).toString("hex");
   req.body.verificationToken = verificationToken;
   req.body.verifiedExpiration = new Date(Date.now() + 1000 * 60 * 60 * 24);
@@ -128,7 +161,7 @@ const forgetPassword = async (req, res) => {
   sendResetPassword({
     email: user.email,
     name: user.first_name,
-     resetpasswordToken,
+    resetpasswordToken,
   });
   res
     .status(StatusCodes.OK)
@@ -188,7 +221,7 @@ const resetPassword = async (req, res) => {
     throw new customError.BadRequestError("Verification token expired");
   }
 
-if (user.passwordToken != passwordToken) {
+  if (user.passwordToken != passwordToken) {
     throw new customError.BadRequestError("Password token incorrect");
   }
   (user.passwordToken = " "), (user.password = password), user.save();

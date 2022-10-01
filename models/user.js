@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
+const roles = ["admin", "user", "vendor"];
+const { idGenerator } = require("../utils");
+
+
 const userSchema = mongoose.Schema(
   {
     email: {
@@ -24,10 +28,6 @@ const userSchema = mongoose.Schema(
       type: String,
       require: [true, "lastname is required"],
     },
-    password: {
-      type: String,
-      require: [true, "password is required"],
-    },
     phone: {
       type: String,
       require: [true, "phone number is required"],
@@ -35,8 +35,38 @@ const userSchema = mongoose.Schema(
     role: {
       type: String,
       required: ["Please provide a role"],
-      enum: ["admin", "user"],
+      enum: roles,
       default: "user",
+    },
+    store_name: {
+      type: String,
+      min: 10,
+      max: 100,
+    },
+    store_state: {
+      type: String,
+      // require: isVendor,
+    },
+    store_address: {
+      type: String,
+      // require: isVendor,
+    },
+    store_country: {
+      type: String,
+      // require: isVendor,
+    },
+    store_description: {
+      type: String,
+      // require: isVendor,
+    },
+    store_review: {
+      type: String,
+      // require: isVendor,
+    },
+    store_rating: {
+      type: Number,
+      default: 0
+      // require: isVendor,
     },
     isVerified: {
       type: Boolean,
@@ -58,6 +88,16 @@ const userSchema = mongoose.Schema(
   { timestamp: true }
 );
 
+idGenerator('user', userSchema)
+
+function isVendor() {
+  console.log(this.role);
+  if (this.role === "vendor") {
+    return true;
+  }
+  return false;
+}
+
 userSchema.pre("save", async function () {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
@@ -68,4 +108,4 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
   return isMatch;
 };
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("user", userSchema);

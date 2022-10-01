@@ -40,7 +40,6 @@ app.use(errorHandler);
 
 const start = async () => {
   try {
-    console.log(MONGODB_URI);
     await connectDb(MONGODB_URI);
     app.listen(port, () => {
       console.log(`Server is listening on port ${port}`);
