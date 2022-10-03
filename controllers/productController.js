@@ -38,6 +38,7 @@ const createProduct = async (req, res) => {
     const uploadedImage = await uploadProductImage(req.file.path);
     req.body.user = req.user.id;
     req.body.image = uploadedImage;
+    console.log(req.body);
     const product = await Product.create(req.body);
     return response(
       res,

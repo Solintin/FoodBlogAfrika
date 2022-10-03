@@ -10,6 +10,7 @@ const isUserAuthenticated = (req, res, next) => {
     try {
       const { id, email, role } = isTokenValid(token);
       req.user = { id, email, role };
+      console.log(req.user);
       next();
     } catch (error) {
       return response(
