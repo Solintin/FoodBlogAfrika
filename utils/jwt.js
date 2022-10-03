@@ -7,4 +7,8 @@ const createJWT = ({ _id, email, role }) => {
   });
 };
 
-module.exports = { createJWT };
+const isTokenValid = (token) => {
+  return jwt.verify(token, process.env.JWT_SECRET)
+}
+
+module.exports = { createJWT, isTokenValid };

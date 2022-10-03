@@ -1,17 +1,17 @@
 const mongoose = require("mongoose");
 const { idGenerator } = require("../utils");
+const Float = require("mongoose-float").loadType(mongoose, 2);
 
 const productSchema = mongoose.Schema(
   {
     name: {
       type: String,
       required: [true, "Please provide name of product"],
-      minLength: 5,
       maxLength: 100,
     },
     image: {
-      type: String,
-      required: [true, "Please provide product image"],
+      type: Object,
+      required: [false, "Please provide product image"],
     },
     category: {
       type: String,
@@ -22,7 +22,7 @@ const productSchema = mongoose.Schema(
       required: [true, "Please provide product description"],
     },
     price: {
-      type: mongoose.Types.Decimal128,
+      type: Float,
       default: 0.0,
       required: [true, "Please provide product price"],
     },
@@ -31,7 +31,7 @@ const productSchema = mongoose.Schema(
       default: 0,
     },
     reviewCount: {
-      type: String,
+      type: Number,
       default: 0,
     },
     status: {
@@ -40,7 +40,7 @@ const productSchema = mongoose.Schema(
     },
     user: {
       ref: "user",
-      type: mongoose.Types.ObjectId,
+      type: Number,
       required: true,
     },
   },

@@ -15,12 +15,12 @@ const productReviewSchema = mongoose.Schema(
     },
     product: {
       ref: "product",
-      type: mongoose.Types.ObjectId,
+      type: Number,
       required: true,
     },
     user: {
       ref: "user",
-      type: mongoose.Types.ObjectId,
+      type: Number,
       required: true,
     },
   },

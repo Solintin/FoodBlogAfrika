@@ -9,14 +9,13 @@ const categorySchema = mongoose.Schema(
       minLength: 5,
       maxLength: 100,
     },
-
     description: {
       type: String,
       required: [true, "Please provide category description"],
     }, 
     user: {
       ref: "User",
-      type: mongoose.Types.ObjectId,
+      type: Number,
       required: [true, "Please provide vendor id"],
     },
   },
